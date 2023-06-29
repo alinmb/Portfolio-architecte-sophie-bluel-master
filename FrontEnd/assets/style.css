@@ -128,7 +128,7 @@ li:hover {
 }
 
 .buttonBloc {
-	padding: 20px 0;
+	margin: 20px 0;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -136,14 +136,14 @@ li:hover {
 }
 
 .buttonBloc button {
-
 	background-color: transparent;
-	border: 1px solid #1D6154;
+	border: 2px solid #1D6154;
 	border-radius: 30px;
 	padding: 5px 20px;
 	color: #1D6154;
 	font-weight: bold;
 	transition: all .5s;
+	font-family: 'Work Sans' ;
 }
 
 .buttonBloc button:hover {

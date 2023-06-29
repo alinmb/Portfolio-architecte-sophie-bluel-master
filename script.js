@@ -16,16 +16,15 @@ function createFigure(link) {
     gallerySection.appendChild(figureElm);
 }
 
-const getAll = () => {
-    fetch('http://localhost:5678/api/works')
-        .then(response => response.json())
-        .then((data) => {
+let url = fetch('http://localhost:5678/api/works').then(response => response.json());
 
-            for (project of data) {
-                createProject();
-                console.log(project)
-            }
-        })
+const getAll = () => {
+    url.then((data) => {
+        for (project of data) {
+            createProject();
+            console.log(project)
+        }
+    })
         .catch(error => console.log("FETCH ERROR"))
 }
 getAll()
@@ -39,16 +38,13 @@ btnAll.addEventListener('click', function () {
     getAll()
 })
 
-/***** OBJETS *****/
+/***** OBJETS Filtrés*****/
 const getObjects = () => {
-    fetch('http://localhost:5678/api/works')
-        .then(response => response.json())
-        .then((data) => {
-
-            for (project2 of data) {
-                createObjets();
-            }
-        })
+    url.then((data) => {
+        for (project2 of data) {
+            createObjets();
+        }
+    })
         .catch(error => console.log("FETCH ERROR"))
 }
 
@@ -63,16 +59,13 @@ btnObj.addEventListener('click', function () {
     getObjects()
 })
 
-/***** APPARTEMENTS *****/
+/***** APPARTEMENTS Filtrés*****/
 const getApp = () => {
-    fetch('http://localhost:5678/api/works')
-        .then(response => response.json())
-        .then((data) => {
-
-            for (project3 of data) {
-                createApp();
-            }
-        })
+    url.then((data) => {
+        for (project3 of data) {
+            createApp();
+        }
+    })
         .catch(error => console.log("FETCH ERROR"))
 }
 
@@ -87,16 +80,13 @@ btnApp.addEventListener('click', function () {
     getApp()
 })
 
-/***** HÔTELS *****/
+/***** HÔTELS Filtrés*****/
 const getHotels = () => {
-    fetch('http://localhost:5678/api/works')
-        .then(response => response.json())
-        .then((data) => {
-
-            for (project4 of data) {
-                createHotels();
-            }
-        })
+    url.then((data) => {
+        for (project4 of data) {
+            createHotels();
+        }
+    })
         .catch(error => console.log("FETCH ERROR"))
 }
 
