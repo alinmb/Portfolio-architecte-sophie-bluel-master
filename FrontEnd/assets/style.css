@@ -30,6 +30,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+	background-color: #fffef8;
 }
 ol, ul {
 	list-style: none;
@@ -124,6 +125,31 @@ li:hover {
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
+}
+
+.buttonBloc {
+	padding: 20px 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+}
+
+.buttonBloc button {
+
+	background-color: transparent;
+	border: 1px solid #1D6154;
+	border-radius: 30px;
+	padding: 5px 20px;
+	color: #1D6154;
+	font-weight: bold;
+	transition: all .5s;
+}
+
+.buttonBloc button:hover {
+	background-color: #1D6154;
+	color: white;
+	cursor: pointer;
 }
 .gallery {
 	width: 100%;
