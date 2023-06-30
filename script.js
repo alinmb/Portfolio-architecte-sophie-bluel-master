@@ -4,6 +4,11 @@ const btnObj = document.querySelector('.btnObj');
 const btnApp = document.querySelector('.btnApp');
 const btnHotels = document.querySelector('.btnHotels');
 
+const btnFocus = (btn) => {
+    document.querySelector('.activeBtn')?.classList.remove('activeBtn');
+    btn.classList.add('activeBtn');
+}
+
 function createFigure(link) {
     const figureElm = document.createElement('figure');
     const imgElm = document.createElement('img');
@@ -19,9 +24,11 @@ function createFigure(link) {
 let url = fetch('http://localhost:5678/api/works').then(response => response.json());
 
 const getAll = () => {
+    gallerySection.innerHTML = "";
+    btnFocus(btnAll)
     url.then((data) => {
         for (project of data) {
-            createProject();
+            createFigure(project)
             console.log(project)
         }
     })
@@ -29,74 +36,40 @@ const getAll = () => {
 }
 getAll()
 
-function createProject() {
-    createFigure(project)
-}
-// Btn AddEventListener
-btnAll.addEventListener('click', function () {
-    gallerySection.innerHTML = "";
-    getAll()
-})
-
-/***** OBJETS Filtrés*****/
+/***** OBJETS Filtrés *****/
 const getObjects = () => {
+    gallerySection.innerHTML = "";
+    btnFocus(btnObj)
     url.then((data) => {
         for (project2 of data) {
-            createObjets();
+            project2.categoryId === 1 ? createFigure(project2) : 'Fichier introuvable';  
         }
     })
         .catch(error => console.log("FETCH ERROR"))
 }
 
-function createObjets() {
-    if (project2.categoryId === 1) {
-        createFigure(project2)
-    }
-}
-// Btn AddEventListener
-btnObj.addEventListener('click', function () {
-    gallerySection.innerHTML = "";
-    getObjects()
-})
-
-/***** APPARTEMENTS Filtrés*****/
+/***** APPARTEMENTS Filtrés *****/
 const getApp = () => {
+    gallerySection.innerHTML = "";
+    btnFocus(btnApp)
     url.then((data) => {
         for (project3 of data) {
-            createApp();
+            project3.categoryId === 2 ? createFigure(project3) : 'Fichier introuvable';  
         }
     })
         .catch(error => console.log("FETCH ERROR"))
 }
 
-function createApp() {
-    if (project3.categoryId === 2) {
-        createFigure(project3)
-    }
-}
-// Btn AddEventListener
-btnApp.addEventListener('click', function () {
-    gallerySection.innerHTML = "";
-    getApp()
-})
-
-/***** HÔTELS Filtrés*****/
+/***** HÔTELS Filtrés *****/
 const getHotels = () => {
+    gallerySection.innerHTML = "";
+    btnFocus(btnHotels)
+
     url.then((data) => {
         for (project4 of data) {
-            createHotels();
+            project4.categoryId === 3 ? createFigure(project4) : 'Fichier introuvable'; 
         }
     })
         .catch(error => console.log("FETCH ERROR"))
 }
 
-function createHotels() {
-    if (project4.categoryId === 3) {
-        createFigure(project4)
-    }
-}
-// Btn AddEventListener
-btnHotels.addEventListener('click', function () {
-    gallerySection.innerHTML = "";
-    getHotels()
-})

@@ -144,13 +144,18 @@ li:hover {
 	font-weight: bold;
 	transition: all .5s;
 	font-family: 'Work Sans' ;
+	cursor: pointer;
+}
+.buttonBloc .activeBtn{
+	background-color: #1D6154;
+	color: white;
 }
 
-.buttonBloc button:hover {
+/*.buttonBloc button:hover {
 	background-color: #1D6154;
 	color: white;
 	cursor: pointer;
-}
+}*/
 .gallery {
 	width: 100%;
 	display: grid;
