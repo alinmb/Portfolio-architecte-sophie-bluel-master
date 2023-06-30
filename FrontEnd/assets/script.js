@@ -29,7 +29,7 @@ const getAll = () => {
     url.then((data) => {
         for (project of data) {
             createFigure(project)
-            console.log(project)
+            //console.log(project)
         }
     })
         .catch(error => console.log("FETCH ERROR"))
