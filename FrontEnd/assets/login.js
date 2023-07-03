@@ -31,7 +31,7 @@ async function login() {
         if (response) {
           /*window.sessionStorage.setItem('infoUseur', JSON.stringify(response.userId));*/ // Uniquement le token ?
           window.sessionStorage.setItem('token', response.token);
-          window.location.replace('./index.html');
+          window.location.replace('./panel.html');
           console.log(response)
         }
         
