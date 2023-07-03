@@ -53,10 +53,22 @@
 
             <div class="modal2">
                 <h3>Ajout photo</h3>
-                <i class="fa-solid fa-xmark close-modal"></i>
-                <div class="gallery-ajouter"></div>
+                <i class="fa-solid fa-arrow-left last-modal"></i>
+                <i class="fa-solid fa-xmark close-modal2"></i>
+                <div class="gallery-ajouter">
+                    <i class="fa-sharp fa-solid fa-image"></i>
+                    <input type="file" id="file" accept=".png, .jpg">
+                    <p>jpg. png : 4mo max</p>
+                </div>
+                <form action="#" method="post">
+                    <p for="title">Titre</p>
+                    <input type="text" name="title" id="title">
+                    <p for="cat-selected">Catégorie</p>
+                    <select name="categorie" id="categorie" class="cat-selected"></select>
+                </form>
+
                 <div class="valid-bloc">
-                     <button>Valider</button>
+                     <button class="btn-valid">Valider</button>
                 </div>
             </div>
         </div>

@@ -352,6 +352,7 @@ display: none;
 .gallery-img {
 	width: 80px;
 	height: 100px;
+	object-fit: cover;
 }
 
 .add-bloc {
@@ -381,6 +382,106 @@ display: none;
 	color: darkred;
 }
 
+/***** DEUXIEME MODAL *****/
+
 .modal2 {
-	display: none;
+	border-radius: 10px;
+	background-color: white;
+	width: 650px;
+	height: 650px;
+	position: relative;
+	overflow: hidden;
+	display: none;	
+}
+
+.modal2 .close-modal2 {
+	position: absolute;
+	top: 30px;
+	right: 30px;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+.modal2 .last-modal {
+	position: absolute;
+	top: 30px;
+	left: 30px;
+	font-size: 18px;
+	cursor: pointer;
+}
+.modal2 h3 {
+	font-size: 30px;
+	margin: 50px 0 30px 0 ;
+	text-align: center;	
+}
+
+.gallery-ajouter {
+	background-color: #E8F1F6;
+	height: 180px;
+	margin: 0 120px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.gallery-ajouter .fa-image{
+	font-size: 60px;
+	color: transparent;
+	-webkit-text-stroke: 1px rgb(192, 190, 190);
+	margin-bottom: 20px;
+}
+
+.gallery-ajouter p {
+	margin-top: 10px;
+	font-size: 12px;
+}
+
+.modal2 form {
+	display: flex;
+	flex-direction: column;
+
+	margin: 10px 120px;
+}
+
+.modal2 form p {
+	margin: 20px 0 10px 0;
+	color: black;
+	font-weight: bold;
+}
+.modal2 form input, select {
+	padding-left: 10px;
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+.modal2 form .cat-selected {
+	padding-left: 10px;
+	font-size: 15px;
+	font-weight: bold;
+	color: rgba(0, 0, 0, 0.781);
+	
+
+}
+
+.valid-bloc {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 30px;
+	margin: 50px 120px;
+	border-top: 1px solid lightgray;
+}
+
+.valid-bloc button {
+	background-color: #A7A7A7;
+	color: white;
+	font-size: 15px;
+	font-family: 'syne';
+	border: none;
+	border-radius: 20px;
+	outline: none;
+	cursor: pointer;
+	margin-bottom: 15px;
+	padding: 10px 80px;
 }
