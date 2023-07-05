@@ -1,15 +1,23 @@
+//// Récupération des élements HTML dans le JS. ////
+
+/* Récupération de la section gallerie ou les images se display.*/
 const gallerySection = document.querySelector('.gallery');
+/* Récupération des boutons pour modifier leur backgroundColor via fonction btnFocus. */
 const btnAll = document.querySelector('.btnAll');
 const btnObj = document.querySelector('.btnObj');
 const btnApp = document.querySelector('.btnApp');
 const btnHotels = document.querySelector('.btnHotels');
+/* Stockage du fetch et de sa réponse en objet javascript dans une variable, facilite la réutilisation */
+const url = fetch('http://localhost:5678/api/works').then(response => response.json());
 
+//// Fonction qui ajoute et supprime la class "activeBtn"  ////
 const btnFocus = (btn) => {
-    document.querySelector('.activeBtn')?.classList.remove('activeBtn');
+    document.querySelector('.activeBtn')?.classList.remove('activeBtn'); /* Le "?" sert à indiquer que si .activeBtn n'existe pas, aucune erreur ne s'affiche. */
     btn.classList.add('activeBtn');
 }
 
-function createFigure(link) {
+//// Fonction qui crée les figures, img, figcaption avec les valeurs récupéré (GET) depuis l'API.  ////
+const createFigure = (link) => {
     const figureElm = document.createElement('figure');
     const imgElm = document.createElement('img');
     const figCaptionElm = document.createElement('figcaption');
@@ -21,55 +29,57 @@ function createFigure(link) {
     gallerySection.appendChild(figureElm);
 }
 
-let url = fetch('http://localhost:5678/api/works').then(response => response.json());
-
+//// Fonction qui récupère tous les projets présent dans l'API + appel à la fonction createFigure. ////
 const getAll = () => {
-    gallerySection.innerHTML = "";
-    btnFocus(btnAll)
+    gallerySection.innerHTML = ""; /* On supprime tout les élements présent dans la gallerie. */
+    btnFocus(btnAll) /* On focus le bouton de la section ou nous nous trouvons. */
+    /* Récuperation des données depuis l'API, nous bouclons dans les données et récuperons chaque projets présent 1 à 1. */
     url.then((data) => {
         for (project of data) {
-            createFigure(project)
-            //console.log(project)
+            createFigure(project) /* Création des figures, img, figcaption grâce à la fonction. */
         }
     })
-        .catch(error => console.log("FETCH ERROR"))
+        .catch(error => console.log(error))
 }
-getAll()
 
-/***** OBJETS Filtrés *****/
+//// FILTRES : Récupération des Objets (id:1), des Appartements (id:2), des Hôtels & restaurants (id:3) ////
+
+// Objets :
 const getObjects = () => {
     gallerySection.innerHTML = "";
     btnFocus(btnObj)
     url.then((data) => {
         for (project2 of data) {
-            project2.categoryId === 1 ? createFigure(project2) : 'Fichier introuvable';  
+            project2.categoryId === 1 ? createFigure(project2) : 'Fichier introuvable';
         }
     })
-        .catch(error => console.log("FETCH ERROR"))
+        .catch(error => console.log(error))
 }
 
-/***** APPARTEMENTS Filtrés *****/
+// Appartements :
 const getApp = () => {
     gallerySection.innerHTML = "";
     btnFocus(btnApp)
     url.then((data) => {
         for (project3 of data) {
-            project3.categoryId === 2 ? createFigure(project3) : 'Fichier introuvable';  
+            project3.categoryId === 2 ? createFigure(project3) : 'Fichier introuvable';
         }
     })
-        .catch(error => console.log("FETCH ERROR"))
+        .catch(error => console.log(error))
 }
 
-/***** HÔTELS Filtrés *****/
+// Hôtels & restaurants :
 const getHotels = () => {
     gallerySection.innerHTML = "";
     btnFocus(btnHotels)
 
     url.then((data) => {
         for (project4 of data) {
-            project4.categoryId === 3 ? createFigure(project4) : 'Fichier introuvable'; 
+            project4.categoryId === 3 ? createFigure(project4) : 'Fichier introuvable';
         }
     })
-        .catch(error => console.log("FETCH ERROR"))
+        .catch(error => console.log(error))
 }
 
+// Appel fonctions :
+getAll()
