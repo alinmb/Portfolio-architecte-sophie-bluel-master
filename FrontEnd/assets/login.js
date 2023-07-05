@@ -1,43 +1,44 @@
+//// Récupération des élements HTML dans le JS. ////
 const submitBtn = document.getElementById('submitBtn');
 const invalide = document.querySelector('.invalide');
 
-async function login() {
-  
+//// Fonction asynchrone qui permet de se connecter à son espace administrateur (panel admin). ////
+const login = () => {
+  /* Nous stockons ici les valeurs entrées dans nos input type email & password. */
   const account = {
     email: (document.getElementById("email2").value),
     password: (document.getElementById("password2").value)
   }
+  /* Credentials = les données que le serveur utilisera pour réalisé l'opération demandée par la requête. */
+  /* Nous convertissons account en chaine JSON */
+  const credentials = JSON.stringify(account)
 
-  const chargeUtile = JSON.stringify(account)
+  /* Ici nous faisons la reqûete avec la method POST, car nous voulons soumettre des données et non en récupérer */
+  fetch('http://localhost:5678/api/users/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'accept': 'application/json'
+    },
+    body: credentials
+  })
+    .then(response => {
 
-    fetch('http://localhost:5678/api/users/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-        'accept': 'application/json'
-      },
-      body: chargeUtile
+      if (response.ok) {
+        return response.json(); /* On return la promesse si la reponse === status 200. */
+
+      } else {
+        invalide.innerText = "Erreur, mot de passe ou e-mail invalide !" /* status 401 unauthorized / 404 user not found. */
+      }
+
     })
-      .then(response => {
-        if (response.ok /*status 200*/) {
-          return response.json();
-          
-        } else {
-          invalide.innerText = "Erreur, mot de passe ou e-mail invalide !" /*status 401 unauthorized 404 user not found*/
-        }
-        /*console.log(response)*/
-      })
-      .then(response => {
-        if (response) {
-          /*window.sessionStorage.setItem('infoUseur', JSON.stringify(response.userId));*/ // Uniquement le token ?
-          window.sessionStorage.setItem('token', response.token);
-          window.location.replace('./panel.html');
-          console.log(response)
-        }
-        
-      })
+    .then(data => {
+      if (data) { /* Nous stockons le token via sessionStorage, la session durera le temps de la navigation. */
+        window.sessionStorage.setItem('token', data.token);
+        window.location.replace('./panel.html'); /* En ayant l'autorisation du serveur, nous serons transféré sur la page panel.html. */
+      }
 
-
+    })
 }
 
 submitBtn.addEventListener('click', (event) => {
