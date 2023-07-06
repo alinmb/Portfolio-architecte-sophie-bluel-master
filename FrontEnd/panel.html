@@ -84,7 +84,7 @@
 					<p for="title">Titre</p>
 					<input type="text" name="title" id="title" onkeyup="filledInput()" required>
 					<p for="cat-selected">Catégorie</p>
-					<select name="categorie" id="categorie" required class="cat-selected" >
+					<select name="categorie" id="categorie" required class="cat-selected" onchange="filledInput()">
 						<option id="value"></option>
 					</select>
 					<div class="valid-bloc">

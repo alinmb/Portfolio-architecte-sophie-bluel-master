@@ -28,7 +28,7 @@ const login = () => {
         return response.json(); /* On return la promesse si la reponse === status 200. */
 
       } else {
-        invalide.innerText = "Erreur, mot de passe ou e-mail invalide !" /* status 401 unauthorized / 404 user not found. */
+        invalide.innerText = "Erreur dans l’identifiant ou le mot de passe." /* status 401 unauthorized / 404 user not found. */
       }
 
     })

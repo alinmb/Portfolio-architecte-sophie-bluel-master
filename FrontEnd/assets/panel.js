@@ -29,16 +29,15 @@ let userToken = window.sessionStorage.getItem("token");
 /* Stockage de la requête au serveur et de sa reponse en objet javascript dans une variable URL. */
 let url = fetch('http://localhost:5678/api/works').then(response => response.json());
 
-
 //// Fonction qui remet à zero l'aperçu des images uploadé. ////
 const prevDisplay = () => {
     displayImg.innerHTML = "";
     newImg.setAttribute('src', '');
     galleryBloc.style.display = "flex";
-    displayImg.style.display = "none";    
+    displayImg.style.display = "none";
 }
 
-//// Fonction qui crée les figures, img, figcaption avec les valeurs récupéré (GET) depuis l'API. ////
+//// !!! PAGE D'ACCUEIL !!! Fonction qui crée les figures, img, figcaption avec les valeurs récupéré (GET) depuis l'API. !!! PAGE D'ACCUEIL !!! ////
 const createFigure = (link) => {
     const figureElm = document.createElement('figure');
     const imgElm = document.createElement('img');
@@ -51,7 +50,7 @@ const createFigure = (link) => {
     gallerySection.appendChild(figureElm);
 }
 
-//// Fonction qui récupère tous les projets présent dans l'API + appel à la fonction createFigure. ////
+//// !!! PAGE D'ACCUEIL !!! Fonction qui récupère tous les projets présent dans l'API + appel à la fonction createFigure. !!! PAGE D'ACCUEIL !!! ////
 const getAll = () => {
     gallerySection.innerHTML = ""; /* On supprime tout les élements présent dans la gallerie. */
     /* Récuperation des données depuis l'API, nous bouclons dans les données et récuperons chaque projets présent 1 à 1. */
@@ -63,13 +62,15 @@ const getAll = () => {
         .catch(error => console.log(error))
 }
 
-//// Fonction qui crée les figures présentes dans la seconde modale.. ////
+//// !!! MODALE 2 !!! Fonction qui crée les figures présentes dans la seconde modale.. !!! MODALE 2 !!! ////
 const createGallery = (link) => {
     const figureElm = document.createElement('figure');
     const imgElm = document.createElement('img');
     const figCaptionElm = document.createElement('figcaption');
     const trashElm = document.createElement('i');
+    const moveElm = document.createElement('i');
     trashElm.setAttribute('class', "fa-solid fa-trash-can")
+    moveElm.setAttribute('class', "fa-solid fa-up-down-left-right")
     imgElm.setAttribute('src', link.imageUrl);
     imgElm.setAttribute('alt', link.title);
     imgElm.classList.add('gallery-img')
@@ -77,6 +78,7 @@ const createGallery = (link) => {
     figureElm.appendChild(imgElm);
     figureElm.appendChild(figCaptionElm);
     figureElm.appendChild(trashElm);
+    figureElm.appendChild(moveElm);
     galleryPhoto.appendChild(figureElm);
 }
 
@@ -102,34 +104,12 @@ const getCategory = () => {
 
 //// Fonction qui modifie le background du bouton validé lorsque les inputs de l'image et du titre sont bien remplis. ////
 const filledInput = () => {
-    if (document.getElementById("title").value !== "" && document.getElementById("value").value !== 0) {
+    if (document.getElementById("title").value !== "" && document.getElementById("categorie").value !== "") {
         btnValid.style.background = "#1D6154";
-    } else {
-        btnValid.style.background = "#A7A7A7";
+        btnValid.style.cursor = "pointer";
     }
 }
-// function validateForm () {
-//     let x = document.forms["title"]["categorie"].value;
-//     if (x == "") {
-//         alert("error");
-//         return false;
-//     }
-// }
 
-// let formError = false;
-
-// const formValidation = () => {
-//     if (document.getElementById("title").value > 0 && document.getElementById("file").files[0] > 0 ) {
-//         formError = true
-//         btnValid.style.background = "#1D6154";
-//     } else {
-//         formError = false
-//         console.log("error")
-//         btnValid.style.background = "#A7A7A7";
-//     }
-// }
-
-/////////////
 //// Fonction qui modifie le background du bouton validé lorsque les inputs de l'image et du titre sont bien remplis. ////
 const addWorks = () => {
 
@@ -180,7 +160,6 @@ logoutBtn.addEventListener('click', (event) => {
 /* Ajout du nouveau projet. */
 myForm.addEventListener('submit', function (event) {
     event.preventDefault();
-    /*formValidation();*/
     addWorks();
 })
 
@@ -229,7 +208,7 @@ window.onclick = function (event) {
 }
 
 /* Permet de mettre un aperçu de l'image que l'on a upoloadé dans une balise img crée plus haut. */
-imgInput.addEventListener('change', function(event) {
+imgInput.addEventListener('change', function (event) {
     const image = URL.createObjectURL(event.target.files[0]);
     newImg.src = image;
     displayImg.append(newImg)
