@@ -416,6 +416,22 @@ display: none;
 	text-align: center;	
 }
 
+.display-img {
+	background-color: #E8F1F6;
+	height: 180px;
+	margin: 0 120px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	display: none;
+}
+
+.display-img img {
+	height: 180px;
+	width: 150px;
+	object-fit: cover;
+}
+
 .gallery-ajouter {
 	background-color: #E8F1F6;
 	height: 180px;
@@ -428,12 +444,12 @@ display: none;
 .gallery-ajouter .fa-image{
 	font-size: 60px;
 	color: transparent;
-	-webkit-text-stroke: 1px rgb(192, 190, 190);
-	margin-bottom: 20px;
+	-webkit-text-stroke: 1px #c0bebe;
+	margin: 20px;
 }
 
 .gallery-ajouter p {
-	margin-top: 10px;
+	margin: 10px;
 	font-size: 12px;
 }
 

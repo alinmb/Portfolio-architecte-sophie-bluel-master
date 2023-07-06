@@ -16,6 +16,12 @@ const lastModal = document.querySelector('.last-modal'); /* Flèche de retour. *
 const logoutBtn = document.querySelector('.logout-btn');
 const categorie = document.querySelector('#categorie'); /* SELECT élement. */
 const btnValid = document.querySelector('.btn-valid'); /* Envoi POST. */
+const myForm = document.querySelector('#form');
+/* Aperçu image uploadé. */
+const galleryBloc = document.querySelector(".gallery-ajouter") /* Bloc contenant input type file + btn upload. */
+const displayImg = document.querySelector('.display-img'); /* Display image upload. */
+const imgInput = document.getElementById("file"); /* Recupère l'input type file pour utiliser sa valeur. */
+const newImg = document.createElement('img'); /* Crée l'image qui contiendra l'aperçu image */
 
 /* Stockage du token dans une variable pour utilisation simplifiée. */
 let userToken = window.sessionStorage.getItem("token");
@@ -23,7 +29,16 @@ let userToken = window.sessionStorage.getItem("token");
 /* Stockage de la requête au serveur et de sa reponse en objet javascript dans une variable URL. */
 let url = fetch('http://localhost:5678/api/works').then(response => response.json());
 
-//// Fonction qui crée les figures, img, figcaption avec les valeurs récupéré (GET) depuis l'API.  ////
+
+//// Fonction qui remet à zero l'aperçu des images uploadé. ////
+const prevDisplay = () => {
+    displayImg.innerHTML = "";
+    newImg.setAttribute('src', '');
+    galleryBloc.style.display = "flex";
+    displayImg.style.display = "none";    
+}
+
+//// Fonction qui crée les figures, img, figcaption avec les valeurs récupéré (GET) depuis l'API. ////
 const createFigure = (link) => {
     const figureElm = document.createElement('figure');
     const imgElm = document.createElement('img');
@@ -87,13 +102,34 @@ const getCategory = () => {
 
 //// Fonction qui modifie le background du bouton validé lorsque les inputs de l'image et du titre sont bien remplis. ////
 const filledInput = () => {
-    if (document.getElementById("title").value !== "" && document.getElementById("file").files[0] !== "") {
+    if (document.getElementById("title").value !== "" && document.getElementById("value").value !== 0) {
         btnValid.style.background = "#1D6154";
     } else {
         btnValid.style.background = "#A7A7A7";
     }
 }
+// function validateForm () {
+//     let x = document.forms["title"]["categorie"].value;
+//     if (x == "") {
+//         alert("error");
+//         return false;
+//     }
+// }
 
+// let formError = false;
+
+// const formValidation = () => {
+//     if (document.getElementById("title").value > 0 && document.getElementById("file").files[0] > 0 ) {
+//         formError = true
+//         btnValid.style.background = "#1D6154";
+//     } else {
+//         formError = false
+//         console.log("error")
+//         btnValid.style.background = "#A7A7A7";
+//     }
+// }
+
+/////////////
 //// Fonction qui modifie le background du bouton validé lorsque les inputs de l'image et du titre sont bien remplis. ////
 const addWorks = () => {
 
@@ -142,8 +178,9 @@ logoutBtn.addEventListener('click', (event) => {
 // AddEventListener :
 
 /* Ajout du nouveau projet. */
-btnValid.addEventListener('click', function (event) {
+myForm.addEventListener('submit', function (event) {
     event.preventDefault();
+    /*formValidation();*/
     addWorks();
 })
 
@@ -172,20 +209,33 @@ addBtn.addEventListener('click', function () {
 lastModal.addEventListener('click', function () {
     modal1.style.display = "block";
     modal2.style.display = "none";
+    prevDisplay();
 })
 /* Fermeture des modales via icon croix. */
 closeModal.addEventListener('click', function () {
     modalContainer.style.display = "none";
+    prevDisplay();
 })
 closeModal2.addEventListener('click', function () {
     modalContainer.style.display = "none";
+    prevDisplay();
 })
 /* Fermeture des modales en cliquant hors de celles-ci. */
 window.onclick = function (event) {
     if (event.target == modalContainer) {
         modalContainer.style.display = "none";
+        prevDisplay();
     }
 }
+
+/* Permet de mettre un aperçu de l'image que l'on a upoloadé dans une balise img crée plus haut. */
+imgInput.addEventListener('change', function(event) {
+    const image = URL.createObjectURL(event.target.files[0]);
+    newImg.src = image;
+    displayImg.append(newImg)
+    displayImg.style.display = "flex";
+    galleryBloc.style.display = "none";
+})
 
 // Appel fonctions :
 getAll();
