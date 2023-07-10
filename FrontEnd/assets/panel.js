@@ -57,30 +57,34 @@ const getAll = () => {
     url.then((data) => {
         for (project of data) {
             createFigure(project); /* Création des figures, img, figcaption grâce à la fonction. */
+            console.log(project.id)
         }
     })
         .catch(error => console.log(error))
 }
 
 //// !!! MODALE 2 !!! Fonction qui crée les figures présentes dans la seconde modale.. !!! MODALE 2 !!! ////
-const createGallery = (link) => {
-    const figureElm = document.createElement('figure');
-    const imgElm = document.createElement('img');
-    const figCaptionElm = document.createElement('figcaption');
-    const trashElm = document.createElement('i');
-    const moveElm = document.createElement('i');
-    trashElm.setAttribute('class', "fa-solid fa-trash-can")
-    moveElm.setAttribute('class', "fa-solid fa-up-down-left-right")
-    imgElm.setAttribute('src', link.imageUrl);
-    imgElm.setAttribute('alt', link.title);
-    imgElm.classList.add('gallery-img')
-    figCaptionElm.innerHTML = "éditer";
-    figureElm.appendChild(imgElm);
-    figureElm.appendChild(figCaptionElm);
-    figureElm.appendChild(trashElm);
-    figureElm.appendChild(moveElm);
-    galleryPhoto.appendChild(figureElm);
-}
+// const createGallery = (link) => {
+//     const figureElm = document.createElement('figure');
+//     const imgElm = document.createElement('img');
+//     const figCaptionElm = document.createElement('figcaption');
+//     const trashElm = document.createElement('i');
+//     trashElm.classList.add('delete');
+//     const moveElm = document.createElement('i');
+//     trashElm.setAttribute('class', "fa-solid fa-trash-can")
+//     moveElm.setAttribute('class', "fa-solid fa-up-down-left-right")
+//     imgElm.setAttribute('src', link.imageUrl);
+//     imgElm.setAttribute('alt', link.title);
+//     imgElm.classList.add('gallery-img')
+//     figCaptionElm.innerHTML = "éditer";
+//     figureElm.appendChild(imgElm);
+//     figureElm.appendChild(figCaptionElm);
+//     figureElm.appendChild(trashElm);
+//     figureElm.appendChild(moveElm);
+//     galleryPhoto.appendChild(figureElm);
+
+// }
+
 
 //// Fonction qui crée des balises <option> dans le <select> déjà présent dans le HTML. ////
 const createOptions = (cat) => {
@@ -110,7 +114,7 @@ const filledInput = () => {
     }
 }
 
-//// Fonction qui modifie le background du bouton validé lorsque les inputs de l'image et du titre sont bien remplis. ////
+//// Fonction qui permet d'ajouter un nouveau projet. ////
 const addWorks = () => {
 
     /* Nous stockons ici les valeurs entrées dans nos input type file et text ainsi que l'option. */
@@ -148,6 +152,26 @@ const addWorks = () => {
     gallerySection.appendChild(imgAdded);
 }
 
+//// Fonction qui supprime un projet en cliquant sur l'icon poubelle. ////
+const deleteWorks = (id) => {
+
+    fetch(`http://localhost:5678/api/works/${id}`, {
+        method: 'DELETE', /* Type de requête. */
+        headers: {
+            'authorization': `Bearer ${userToken}`, /* Token necessaire pour avoir l'autorisation de poster. */
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log(response.status)
+            } else {
+                console.log('fetch delete error')
+            }
+        })
+        .catch(error => console.log(error))
+}
+
 //// Fonction qui nous permet de se deconnecter. ////
 logoutBtn.addEventListener('click', (event) => {
     event.preventDefault();
@@ -170,10 +194,33 @@ openModal.addEventListener('click', function () {
     modal1.style.display = "block";
     modal2.style.display = "none";
 
-    /* Création d'une nouvelle modale dans la gallerie. */
+/* Création d'une nouvelle gallerie dans la modale & utilisation de la fonction supprimer. */
     url.then((data) => {
         for (project of data) {
-            createGallery(project);
+            const figureElm = document.createElement('figure');
+            const imgElm = document.createElement('img');
+            const figCaptionElm = document.createElement('figcaption');
+            const trashElm = document.createElement('i');
+            trashElm.classList.add('delete');
+            const moveElm = document.createElement('i');
+            trashElm.setAttribute('class', "fa-solid fa-trash-can")
+            trashElm.setAttribute('idWork', project.id)
+            moveElm.setAttribute('class', "fa-solid fa-up-down-left-right")
+            imgElm.setAttribute('src', project.imageUrl);
+            imgElm.setAttribute('alt', project.title);
+            imgElm.classList.add('gallery-img')
+            figCaptionElm.innerHTML = "éditer";
+            figureElm.appendChild(imgElm);
+            figureElm.appendChild(figCaptionElm);
+            figureElm.appendChild(trashElm);
+            figureElm.appendChild(moveElm);
+            galleryPhoto.appendChild(figureElm);
+
+            trashElm.addEventListener("click", (event) => {
+                event.preventDefault();
+                const idWork = event.currentTarget.getAttribute('idWork');
+                deleteWorks(idWork);
+            })
         }
     })
         .catch(error => console.log(error));
@@ -222,4 +269,12 @@ getCategory();
 
 
 
-
+// let result = 
+// `
+//     <figure>
+//         <img src="${project.imageUrl}" alt="${project.title}" class="gallery-img">
+//         <figcaption>éditer</figcaption>
+//         <i class="fa-solid fa-trash-can delete" idWork="${project.id}"></i>
+//         <i class="fa-solid fa-up-down-left-right"></i>
+//     </figure>
+// `;
