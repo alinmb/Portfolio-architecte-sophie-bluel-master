@@ -22,6 +22,8 @@ const galleryBloc = document.querySelector(".gallery-ajouter") /* Bloc contenant
 const displayImg = document.querySelector('.display-img'); /* Display image upload. */
 const imgInput = document.getElementById("file"); /* Recupère l'input type file pour utiliser sa valeur. */
 const newImg = document.createElement('img'); /* Crée l'image qui contiendra l'aperçu image */
+const titleModal = document.getElementById("title");
+const catModal = document.getElementById("categorie");
 
 /* Stockage du token dans une variable pour utilisation simplifiée. */
 let userToken = window.sessionStorage.getItem("token");
@@ -32,6 +34,8 @@ let url = fetch('http://localhost:5678/api/works').then(response => response.jso
 //// Fonction qui remet à zero l'aperçu des images uploadé. ////
 const prevDisplay = () => {
     displayImg.innerHTML = "";
+    titleModal.value = "";
+    catModal.value = "";
     newImg.setAttribute('src', '');
     galleryBloc.style.display = "flex";
     displayImg.style.display = "none";
@@ -135,7 +139,11 @@ const addWorks = () => {
         },
         body: formData
     })
-        .then(res => res.json()) /* On recupère le resultat de la promesse converti en objet javascript. */
+        .then(res => {
+            if (res.ok) 
+            res.json()
+            alert('Nouveau projet ajouté avec succès !');
+        }) /* On recupère le resultat de la promesse converti en objet javascript. */
         .then(data => console.log(data))
         .catch(error => console.log(error))
 
@@ -164,7 +172,8 @@ const deleteWorks = (id) => {
     })
         .then(response => {
             if (response.ok) {
-                console.log(response.status)
+                console.log(response.status);
+                alert('Projet supprimé avec succès !');
             } else {
                 console.log('fetch delete error')
             }
@@ -185,6 +194,10 @@ logoutBtn.addEventListener('click', (event) => {
 myForm.addEventListener('submit', function (event) {
     event.preventDefault();
     addWorks();
+    setTimeout(() => {
+        window.location.reload(true);
+    }, 2000);
+    /*window.location.reload()*/
 })
 
 /* Ouverture du container des modales */
@@ -220,6 +233,9 @@ openModal.addEventListener('click', function () {
                 event.preventDefault();
                 const idWork = event.currentTarget.getAttribute('idWork');
                 deleteWorks(idWork);
+                setTimeout(() => {
+                    window.location.reload(true);
+                }, 2000);
             })
         }
     })
@@ -228,8 +244,10 @@ openModal.addEventListener('click', function () {
 
 /* Ouverture de la modale pour ajouter un projet. */
 addBtn.addEventListener('click', function () {
+    prevDisplay();
     modal1.style.display = "none";
     modal2.style.display = "block";
+    
 })
 /* Retour à la première modale. */
 lastModal.addEventListener('click', function () {
