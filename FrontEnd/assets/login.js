@@ -9,6 +9,11 @@ const login = () => {
     email: (document.getElementById("email2").value),
     password: (document.getElementById("password2").value)
   }
+
+  let emailRegExp = new RegExp("[a-z0-9._-]+@[a-z0-9._-]+\\.[a-z0-9._-]+")
+     if (!emailRegExp.test(account.email)) {
+        throw new Error(alert("Format e-mail invalide. (exemple@exemple.com)"))
+     } 
   /* Credentials = les données que le serveur utilisera pour réalisé l'opération demandée par la requête. */
   /* Nous convertissons account en chaine JSON */
   const credentials = JSON.stringify(account)
