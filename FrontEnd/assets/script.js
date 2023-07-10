@@ -36,7 +36,13 @@ const getAll = () => {
     /* Récuperation des données depuis l'API, nous bouclons dans les données et récuperons chaque projets présent 1 à 1. */
     url.then((data) => {
         for (project of data) {
-            createFigure(project) /* Création des figures, img, figcaption grâce à la fonction. */
+            let eachProject = `
+                <figure>
+                    <img src="${project.imageUrl}" alt="${project.title}" class="gallery-img">
+                    <figcaption>${project.title}</figcaption>
+                </figure>
+            `;
+            gallerySection.insertAdjacentHTML('beforeend', eachProject);
         }
     })
         .catch(error => console.log(error))

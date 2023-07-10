@@ -284,15 +284,3 @@ imgInput.addEventListener('change', function (event) {
 // Appel fonctions :
 getAll();
 getCategory();
-
-
-
-// let result = 
-// `
-//     <figure>
-//         <img src="${project.imageUrl}" alt="${project.title}" class="gallery-img">
-//         <figcaption>éditer</figcaption>
-//         <i class="fa-solid fa-trash-can delete" idWork="${project.id}"></i>
-//         <i class="fa-solid fa-up-down-left-right"></i>
-//     </figure>
-// `;
