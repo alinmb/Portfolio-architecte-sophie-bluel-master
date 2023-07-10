@@ -30,61 +30,88 @@ const createFigure = (link) => {
 }
 
 //// Fonction qui récupère tous les projets présent dans l'API + appel à la fonction createFigure. ////
-const getAll = () => {
+async function getAll () {
     gallerySection.innerHTML = ""; /* On supprime tout les élements présent dans la gallerie. */
     btnFocus(btnAll) /* On focus le bouton de la section ou nous nous trouvons. */
     /* Récuperation des données depuis l'API, nous bouclons dans les données et récuperons chaque projets présent 1 à 1. */
-    url.then((data) => {
-        for (project of data) {
+    const response = await fetch('http://localhost:5678/api/works');
+    const projects = await response.json();
+    
+    try {
+        for (i = 0; i < projects.length; i++) {
             let eachProject = `
                 <figure>
-                    <img src="${project.imageUrl}" alt="${project.title}" class="gallery-img">
-                    <figcaption>${project.title}</figcaption>
+                    <img src="${projects[i].imageUrl}" alt="${projects[i].title}" class="gallery-img">
+                    <figcaption>${projects[i].title}</figcaption>
                 </figure>
             `;
             gallerySection.insertAdjacentHTML('beforeend', eachProject);
         }
-    })
-        .catch(error => console.log(error))
+    }
+    catch (error) {
+        console.log(error)
+    }
+    
+        
 }
 
 //// FILTRES : Récupération des Objets (id:1), des Appartements (id:2), des Hôtels & restaurants (id:3) ////
 
 // Objets :
-const getObjects = () => {
+async function getObjects () {
     gallerySection.innerHTML = "";
     btnFocus(btnObj)
-    url.then((data) => {
-        for (project2 of data) {
-            project2.categoryId === 1 ? createFigure(project2) : 'Fichier introuvable';
+    const response = await fetch('http://localhost:5678/api/works');
+    const projectsObjects = await response.json();
+
+    try {
+        for (i = 0; i < projectsObjects.length; i++) {
+            if (projectsObjects[i].categoryId === 1) {
+                createFigure(projectsObjects[i])
+            }
         }
-    })
-        .catch(error => console.log(error))
+    }
+    catch (error) {
+        console.log(error)
+    }
 }
 
 // Appartements :
-const getApp = () => {
+async function getApp () {
     gallerySection.innerHTML = "";
     btnFocus(btnApp)
-    url.then((data) => {
-        for (project3 of data) {
-            project3.categoryId === 2 ? createFigure(project3) : 'Fichier introuvable';
+    const response = await fetch('http://localhost:5678/api/works');
+    const projectsAppart = await response.json();
+
+    try {
+        for (i = 0; i < projectsAppart.length; i++) {
+            if (projectsAppart[i].categoryId === 2) {
+                createFigure(projectsAppart[i])
+            } 
         }
-    })
-        .catch(error => console.log(error))
+    }
+    catch (error) {
+        console.log(error)
+    }
 }
 
 // Hôtels & restaurants :
-const getHotels = () => {
+async function getHotels () {
     gallerySection.innerHTML = "";
     btnFocus(btnHotels)
+    const response = await fetch('http://localhost:5678/api/works');
+    const projectsHotelsRest = await response.json();
 
-    url.then((data) => {
-        for (project4 of data) {
-            project4.categoryId === 3 ? createFigure(project4) : 'Fichier introuvable';
+    try {
+        for (i = 0; i < projectsHotelsRest.length; i++) {
+            if (projectsHotelsRest[i].categoryId === 2) {
+                createFigure(projectsHotelsRest[i])
+            } 
         }
-    })
-        .catch(error => console.log(error))
+    }
+    catch (error) {
+        console.log(error)
+    }
 }
 
 // Appel fonctions :
