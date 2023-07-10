@@ -104,7 +104,7 @@ async function getHotels () {
 
     try {
         for (i = 0; i < projectsHotelsRest.length; i++) {
-            if (projectsHotelsRest[i].categoryId === 2) {
+            if (projectsHotelsRest[i].categoryId === 3) {
                 createFigure(projectsHotelsRest[i])
             } 
         }
