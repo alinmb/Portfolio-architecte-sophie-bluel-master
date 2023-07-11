@@ -8,7 +8,7 @@ const btnObj = document.querySelector('.btnObj');
 const btnApp = document.querySelector('.btnApp');
 const btnHotels = document.querySelector('.btnHotels');
 /* Stockage du fetch et de sa réponse en objet javascript dans une variable, facilite la réutilisation */
-const url = fetch('http://localhost:5678/api/works').then(response => response.json());
+/*const url = fetch('http://localhost:5678/api/works').then(response => response.json());*/
 
 //// Fonction qui ajoute et supprime la class "activeBtn"  ////
 const btnFocus = (btn) => {

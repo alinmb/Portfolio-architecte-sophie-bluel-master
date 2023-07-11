@@ -201,15 +201,18 @@ myForm.addEventListener('submit', function (event) {
 })
 
 /* Ouverture du container des modales */
-openModal.addEventListener('click', function () {
+openModal.addEventListener('click', async function () {
     galleryPhoto.innerHTML = "";
     modalContainer.style.display = "flex";
     modal1.style.display = "block";
     modal2.style.display = "none";
 
 /* Création d'une nouvelle gallerie dans la modale & utilisation de la fonction supprimer. */
-    url.then((data) => {
-        for (project of data) {
+    const response = await fetch('http://localhost:5678/api/works');
+    const projects = await response.json();
+
+    try {
+        for (let i = 0; i < projects.length ; i++) {
             const figureElm = document.createElement('figure');
             const imgElm = document.createElement('img');
             const figCaptionElm = document.createElement('figcaption');
@@ -217,10 +220,10 @@ openModal.addEventListener('click', function () {
             trashElm.classList.add('delete');
             const moveElm = document.createElement('i');
             trashElm.setAttribute('class', "fa-solid fa-trash-can")
-            trashElm.setAttribute('idWork', project.id)
+            trashElm.setAttribute('idWork', projects[i].id)
             moveElm.setAttribute('class', "fa-solid fa-up-down-left-right")
-            imgElm.setAttribute('src', project.imageUrl);
-            imgElm.setAttribute('alt', project.title);
+            imgElm.setAttribute('src', projects[i].imageUrl);
+            imgElm.setAttribute('alt', projects[i].title);
             imgElm.classList.add('gallery-img')
             figCaptionElm.innerHTML = "éditer";
             figureElm.appendChild(imgElm);
@@ -238,8 +241,43 @@ openModal.addEventListener('click', function () {
                 }, 2000);
             })
         }
-    })
-        .catch(error => console.log(error));
+    }
+    catch (error) {
+        console.log(error)
+    }
+
+    // url.then((data) => {
+    //     for (project of data) {
+    //         const figureElm = document.createElement('figure');
+    //         const imgElm = document.createElement('img');
+    //         const figCaptionElm = document.createElement('figcaption');
+    //         const trashElm = document.createElement('i');
+    //         trashElm.classList.add('delete');
+    //         const moveElm = document.createElement('i');
+    //         trashElm.setAttribute('class', "fa-solid fa-trash-can")
+    //         trashElm.setAttribute('idWork', project.id)
+    //         moveElm.setAttribute('class', "fa-solid fa-up-down-left-right")
+    //         imgElm.setAttribute('src', project.imageUrl);
+    //         imgElm.setAttribute('alt', project.title);
+    //         imgElm.classList.add('gallery-img')
+    //         figCaptionElm.innerHTML = "éditer";
+    //         figureElm.appendChild(imgElm);
+    //         figureElm.appendChild(figCaptionElm);
+    //         figureElm.appendChild(trashElm);
+    //         figureElm.appendChild(moveElm);
+    //         galleryPhoto.appendChild(figureElm);
+
+    //         trashElm.addEventListener("click", (event) => {
+    //             event.preventDefault();
+    //             const idWork = event.currentTarget.getAttribute('idWork');
+    //             deleteWorks(idWork);
+    //             setTimeout(() => {
+    //                 window.location.reload(true);
+    //             }, 2000);
+    //         })
+    //     }
+    // })
+    //     .catch(error => console.log(error));
 })
 
 /* Ouverture de la modale pour ajouter un projet. */
