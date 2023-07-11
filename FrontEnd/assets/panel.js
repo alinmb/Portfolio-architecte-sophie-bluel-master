@@ -31,7 +31,7 @@ let userToken = window.sessionStorage.getItem("token");
 /* Stockage de la requête au serveur et de sa reponse en objet javascript dans une variable URL. */
 let url = fetch('http://localhost:5678/api/works').then(response => response.json());
 
-//// Fonction qui remet à zero l'aperçu des images uploadé. ////
+//// Fonction qui remet à zero l'aperçu des images uploadé ainsi que le titre et la catégorie. ////
 const prevDisplay = () => {
     displayImg.innerHTML = "";
     titleModal.value = "";
@@ -61,34 +61,10 @@ const getAll = () => {
     url.then((data) => {
         for (project of data) {
             createFigure(project); /* Création des figures, img, figcaption grâce à la fonction. */
-            console.log(project.id)
         }
     })
         .catch(error => console.log(error))
 }
-
-//// !!! MODALE 2 !!! Fonction qui crée les figures présentes dans la seconde modale.. !!! MODALE 2 !!! ////
-// const createGallery = (link) => {
-//     const figureElm = document.createElement('figure');
-//     const imgElm = document.createElement('img');
-//     const figCaptionElm = document.createElement('figcaption');
-//     const trashElm = document.createElement('i');
-//     trashElm.classList.add('delete');
-//     const moveElm = document.createElement('i');
-//     trashElm.setAttribute('class', "fa-solid fa-trash-can")
-//     moveElm.setAttribute('class', "fa-solid fa-up-down-left-right")
-//     imgElm.setAttribute('src', link.imageUrl);
-//     imgElm.setAttribute('alt', link.title);
-//     imgElm.classList.add('gallery-img')
-//     figCaptionElm.innerHTML = "éditer";
-//     figureElm.appendChild(imgElm);
-//     figureElm.appendChild(figCaptionElm);
-//     figureElm.appendChild(trashElm);
-//     figureElm.appendChild(moveElm);
-//     galleryPhoto.appendChild(figureElm);
-
-// }
-
 
 //// Fonction qui crée des balises <option> dans le <select> déjà présent dans le HTML. ////
 const createOptions = (cat) => {
@@ -99,20 +75,26 @@ const createOptions = (cat) => {
 }
 
 //// Fonction qui récupère toutes les catégories présentes dans l'API. ////
-const getCategory = () => {
-    fetch('http://localhost:5678/api/categories')
-        .then(response => response.json())
-        .then((data) => {
-            for (catego of data) {
-                createOptions(catego);
-            }
-        })
-        .catch(error => console.log(error))
+async function getCategory () {
+
+    const response = await fetch('http://localhost:5678/api/categories');
+    const category = await response.json();
+
+    try {
+        for (let i = 0; i < category.length ; i++) {
+            createOptions(category[i])
+        }
+    }
+    catch (error) {
+        console.log(error)
+    }
 }
 
 //// Fonction qui modifie le background du bouton validé lorsque les inputs de l'image et du titre sont bien remplis. ////
 const filledInput = () => {
-    if (document.getElementById("title").value !== "" && document.getElementById("categorie").value !== "") {
+    if (document.getElementById("file").value !== "" &&
+        document.getElementById("title").value !== "" &&
+        document.getElementById("categorie").value !== "") {
         btnValid.style.background = "#1D6154";
         btnValid.style.cursor = "pointer";
     }
@@ -126,7 +108,7 @@ const addWorks = () => {
     const title = document.getElementById("title").value;
     const category = document.getElementById("categorie").value;
 
-    const formData = new FormData(); /* FormData (FormData object) simplifie la requête, nous n'avons pas a spécifié d'headers, encoding, etc. */
+    const formData = new FormData(); /* [Crée un nouvel objet clé + valeur] ; FormData (FormData object) simplifie la requête, nous n'avons pas a spécifié d'headers, encoding, etc. */
     /* Nous stockons ici les valeurs dans ce nouvel objet formData */
     formData.append('image', image);
     formData.append('title', title);
@@ -137,14 +119,13 @@ const addWorks = () => {
         headers: {
             'authorization': `Bearer ${userToken}` /* Token necessaire pour avoir l'autorisation de poster. */
         },
-        body: formData
+        body: formData /* Corps de la requête avec image, title, categorie. */
     })
         .then(res => {
-            if (res.ok) 
-            res.json()
+            if (res.ok) /* Si la reponse du serveur est ok */
+                res.json()
             alert('Nouveau projet ajouté avec succès !');
-        }) /* On recupère le resultat de la promesse converti en objet javascript. */
-        .then(data => console.log(data))
+        }) 
         .catch(error => console.log(error))
 
     /* Création de la nouvelle figure */
@@ -207,12 +188,12 @@ openModal.addEventListener('click', async function () {
     modal1.style.display = "block";
     modal2.style.display = "none";
 
-/* Création d'une nouvelle gallerie dans la modale & utilisation de la fonction supprimer. */
+    /* Création d'une nouvelle gallerie dans la modale & utilisation de la fonction supprimer. */
     const response = await fetch('http://localhost:5678/api/works');
     const projects = await response.json();
 
     try {
-        for (let i = 0; i < projects.length ; i++) {
+        for (let i = 0; i < projects.length; i++) {
             const figureElm = document.createElement('figure');
             const imgElm = document.createElement('img');
             const figCaptionElm = document.createElement('figcaption');
@@ -245,39 +226,6 @@ openModal.addEventListener('click', async function () {
     catch (error) {
         console.log(error)
     }
-
-    // url.then((data) => {
-    //     for (project of data) {
-    //         const figureElm = document.createElement('figure');
-    //         const imgElm = document.createElement('img');
-    //         const figCaptionElm = document.createElement('figcaption');
-    //         const trashElm = document.createElement('i');
-    //         trashElm.classList.add('delete');
-    //         const moveElm = document.createElement('i');
-    //         trashElm.setAttribute('class', "fa-solid fa-trash-can")
-    //         trashElm.setAttribute('idWork', project.id)
-    //         moveElm.setAttribute('class', "fa-solid fa-up-down-left-right")
-    //         imgElm.setAttribute('src', project.imageUrl);
-    //         imgElm.setAttribute('alt', project.title);
-    //         imgElm.classList.add('gallery-img')
-    //         figCaptionElm.innerHTML = "éditer";
-    //         figureElm.appendChild(imgElm);
-    //         figureElm.appendChild(figCaptionElm);
-    //         figureElm.appendChild(trashElm);
-    //         figureElm.appendChild(moveElm);
-    //         galleryPhoto.appendChild(figureElm);
-
-    //         trashElm.addEventListener("click", (event) => {
-    //             event.preventDefault();
-    //             const idWork = event.currentTarget.getAttribute('idWork');
-    //             deleteWorks(idWork);
-    //             setTimeout(() => {
-    //                 window.location.reload(true);
-    //             }, 2000);
-    //         })
-    //     }
-    // })
-    //     .catch(error => console.log(error));
 })
 
 /* Ouverture de la modale pour ajouter un projet. */
@@ -285,7 +233,7 @@ addBtn.addEventListener('click', function () {
     prevDisplay();
     modal1.style.display = "none";
     modal2.style.display = "block";
-    
+
 })
 /* Retour à la première modale. */
 lastModal.addEventListener('click', function () {
@@ -312,9 +260,9 @@ window.onclick = function (event) {
 
 /* Permet de mettre un aperçu de l'image que l'on a upoloadé dans une balise img crée plus haut. */
 imgInput.addEventListener('change', function (event) {
-    const image = URL.createObjectURL(event.target.files[0]);
-    newImg.src = image;
-    displayImg.append(newImg)
+    const image = URL.createObjectURL(event.target.files[0]); /* Création d'un URL pour l'image uploadé */
+    newImg.src = image; /* La source de l'image devient l'url crée */
+    displayImg.append(newImg); /* Ajout de la nouvelle image dans le bloc displayImg */
     displayImg.style.display = "flex";
     galleryBloc.style.display = "none";
 })
