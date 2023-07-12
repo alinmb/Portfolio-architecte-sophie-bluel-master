@@ -150,11 +150,11 @@ const deleteWorks = (id) => {
             'authorization': `Bearer ${userToken}`, /* Token necessaire pour avoir l'autorisation de poster. */
             'Content-Type': 'application/json'
         }
-    })
+    })  
+
         .then(response => {
             if (response.ok) {
                 console.log(response.status);
-                alert('Projet supprimé avec succès !');
             } else {
                 console.log('fetch delete error')
             }
@@ -184,6 +184,7 @@ myForm.addEventListener('submit', function (event) {
 /* Ouverture du container des modales */
 openModal.addEventListener('click', async function () {
     galleryPhoto.innerHTML = "";
+    gallerySection.innerHTML = "";
     modalContainer.style.display = "flex";
     modal1.style.display = "block";
     modal2.style.display = "none";
@@ -194,6 +195,7 @@ openModal.addEventListener('click', async function () {
 
     try {
         for (let i = 0; i < projects.length; i++) {
+            /* Figures modales */
             const figureElm = document.createElement('figure');
             const imgElm = document.createElement('img');
             const figCaptionElm = document.createElement('figcaption');
@@ -201,7 +203,7 @@ openModal.addEventListener('click', async function () {
             trashElm.classList.add('delete');
             const moveElm = document.createElement('i');
             trashElm.setAttribute('class', "fa-solid fa-trash-can")
-            trashElm.setAttribute('idWork', projects[i].id)
+            trashElm.setAttribute('data-workid', projects[i].id)
             moveElm.setAttribute('class', "fa-solid fa-up-down-left-right")
             imgElm.setAttribute('src', projects[i].imageUrl);
             imgElm.setAttribute('alt', projects[i].title);
@@ -212,20 +214,40 @@ openModal.addEventListener('click', async function () {
             figureElm.appendChild(trashElm);
             figureElm.appendChild(moveElm);
             galleryPhoto.appendChild(figureElm);
+            
+           /* Figures galerie actualisés sans reload */
+            const figureElm2 = document.createElement('figure');
+            const imgElm2 = document.createElement('img');
+            const figCaptionElm2 = document.createElement('figcaption');
+            imgElm2.setAttribute('src', projects[i].imageUrl);
+            imgElm2.setAttribute('alt', projects[i].title);
+            figCaptionElm2.innerHTML = projects[i].title;
+            figureElm2.appendChild(imgElm2);
+            figureElm2.appendChild(figCaptionElm2);
+            gallerySection.appendChild(figureElm2);
 
             trashElm.addEventListener("click", (event) => {
                 event.preventDefault();
-                const idWork = event.currentTarget.getAttribute('idWork');
-                deleteWorks(idWork);
-                setTimeout(() => {
-                    window.location.reload(true);
-                }, 2000);
+                const workId = event.currentTarget.getAttribute('data-workid');
+                let text = "Êtes vous sur de vouloir supprimer ce projet ?"
+                if (confirm(text) == true){
+                    deleteWorks(workId);
+                    figureElm.remove() ; 
+                    figureElm2.remove();
+                    alert('Projet supprimé avec succès !');
+                } else {
+                    alert('Suppression annulée !');
+                }
+
             })
+            
         }
     }
     catch (error) {
         console.log(error)
     }
+
+    
 })
 
 /* Ouverture de la modale pour ajouter un projet. */
