@@ -101,8 +101,8 @@ const filledInput = () => {
 }
 
 //// Fonction qui permet d'ajouter un nouveau projet. ////
-const addWorks = () => {
-
+myForm.addEventListener('submit', async function (event) {
+    event.preventDefault();
     /* Nous stockons ici les valeurs entrées dans nos input type file et text ainsi que l'option. */
     const image = document.getElementById("file").files[0];
     const title = document.getElementById("title").value;
@@ -121,25 +121,30 @@ const addWorks = () => {
         },
         body: formData /* Corps de la requête avec image, title, categorie. */
     })
-        .then(res => {
-            if (res.ok) /* Si la reponse du serveur est ok */
-                res.json()
-            alert('Nouveau projet ajouté avec succès !');
-        }) 
+        .then(res => {/* Si la reponse du serveur est ok */
+            if (res.ok) {
+                /* Création de la nouvelle figure page d'accueil*/
+                const workAdded = document.createElement('figure');
+                const imgAdded = document.createElement('img');
+                const figcaption = document.createElement('figcaption');
+                imgAdded.setAttribute('alt', title);
+                imgAdded.setAttribute('src', newImg.src);
+                figcaption.setAttribute('id', category);
+                figcaption.innerHTML = title;
+                workAdded.appendChild(imgAdded)
+                workAdded.appendChild(figcaption)
+                gallerySection.appendChild(workAdded)
+
+                alert('Projet ajouté avec succès !')
+
+                modalContainer.style.display = "none";
+                prevDisplay();
+            }
+                
+        })
         .catch(error => console.log(error))
 
-    /* Création de la nouvelle figure */
-    const workAdded = document.createElement('figure');
-    const imgAdded = document.createElement('img');
-    const figcaption = document.createElement('figcaption');
-
-    imgAdded.setAttribute('alt', title);
-    figcaption.setAttribute('id', category);
-    figcaption.innerHTML = title;
-
-    gallerySection.appendChild(workAdded);
-    gallerySection.appendChild(imgAdded);
-}
+})
 
 //// Fonction qui supprime un projet en cliquant sur l'icon poubelle. ////
 const deleteWorks = (id) => {
@@ -172,18 +177,18 @@ logoutBtn.addEventListener('click', (event) => {
 // AddEventListener :
 
 /* Ajout du nouveau projet. */
-myForm.addEventListener('submit', function (event) {
-    event.preventDefault();
-    addWorks();
-    setTimeout(() => {
-        window.location.reload(true);
-    }, 2000);
-    /*window.location.reload()*/
-})
+// myForm.addEventListener('submit', function (event) {
+//     event.preventDefault();
+//     addWorks();
+//     // setTimeout(() => {
+//     //     window.location.reload(true);
+//     // }, 2000);
+//     /*window.location.reload()*/
+// })
 
 /* Ouverture du container des modales */
 openModal.addEventListener('click', async function () {
-    galleryPhoto.innerHTML = "";
+    galleryPhoto.innerHTML= '';
     gallerySection.innerHTML = "";
     modalContainer.style.display = "flex";
     modal1.style.display = "block";
@@ -287,8 +292,12 @@ imgInput.addEventListener('change', function (event) {
     displayImg.append(newImg); /* Ajout de la nouvelle image dans le bloc displayImg */
     displayImg.style.display = "flex";
     galleryBloc.style.display = "none";
+    
 })
+
+
 
 // Appel fonctions :
 getAll();
 getCategory();
+
