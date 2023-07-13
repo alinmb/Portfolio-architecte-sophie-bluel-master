@@ -31,6 +31,13 @@ let userToken = window.sessionStorage.getItem("token");
 /* Stockage de la requête au serveur et de sa reponse en objet javascript dans une variable URL. */
 let url = fetch('http://localhost:5678/api/works').then(response => response.json());
 
+//// Fonction qui nous permet de se deconnecter en supprimant le token. ////
+logoutBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    window.sessionStorage.removeItem('token');
+    window.location.replace('./index.html');
+})
+
 //// Fonction qui remet à zero l'aperçu des images uploadé ainsi que le titre et la catégorie. ////
 const prevDisplay = () => {
     displayImg.innerHTML = "";
@@ -52,6 +59,27 @@ const createFigure = (link) => {
     figureElm.appendChild(imgElm);
     figureElm.appendChild(figCaptionElm);
     gallerySection.appendChild(figureElm);
+}
+//// Fonction qui crée les figures des nouveaux projets. ////
+const createModalFigure = (figure) => {
+    const figureElm = document.createElement('figure');
+    const imgElm = document.createElement('img');
+    const figCaptionElm = document.createElement('figcaption');
+    const trashElm = document.createElement('i');
+    trashElm.classList.add('delete');
+    const moveElm = document.createElement('i');
+    trashElm.setAttribute('class', "fa-solid fa-trash-can");
+    trashElm.setAttribute('data-workid', figure.id);
+    moveElm.setAttribute('class', "fa-solid fa-up-down-left-right");
+    imgElm.setAttribute('src', figure.imageUrl);
+    imgElm.setAttribute('alt', figure.title);
+    imgElm.classList.add('gallery-img');
+    figCaptionElm.innerHTML = "éditer";
+    figureElm.appendChild(imgElm);
+    figureElm.appendChild(figCaptionElm);
+    figureElm.appendChild(trashElm);
+    figureElm.appendChild(moveElm);
+    galleryPhoto.appendChild(figureElm);
 }
 
 //// !!! PAGE D'ACCUEIL !!! Fonction qui récupère tous les projets présent dans l'API + appel à la fonction createFigure. !!! PAGE D'ACCUEIL !!! ////
@@ -75,18 +103,16 @@ const createOptions = (cat) => {
 }
 
 //// Fonction qui récupère toutes les catégories présentes dans l'API. ////
-async function getCategory () {
-
+const getCategory = async () => {
     const response = await fetch('http://localhost:5678/api/categories');
     const category = await response.json();
-
     try {
-        for (let i = 0; i < category.length ; i++) {
-            createOptions(category[i])
+        for (let i = 0; i < category.length; i++) {
+            createOptions(category[i]);
         }
     }
     catch (error) {
-        console.log(error)
+        console.log(error);
     }
 }
 
@@ -100,107 +126,53 @@ const filledInput = () => {
     }
 }
 
-//// Fonction qui permet d'ajouter un nouveau projet. ////
-myForm.addEventListener('submit', async function (event) {
-    event.preventDefault();
-    /* Nous stockons ici les valeurs entrées dans nos input type file et text ainsi que l'option. */
-    const image = document.getElementById("file").files[0];
-    const title = document.getElementById("title").value;
-    const category = document.getElementById("categorie").value;
-
-    const formData = new FormData(); /* [Crée un nouvel objet clé + valeur] ; FormData (FormData object) simplifie la requête, nous n'avons pas a spécifié d'headers, encoding, etc. */
-    /* Nous stockons ici les valeurs dans ce nouvel objet formData */
-    formData.append('image', image);
-    formData.append('title', title);
-    formData.append('category', parseInt(category));
-
-    fetch('http://localhost:5678/api/works', {
-        method: 'POST', /* Type de requête. */
-        headers: {
-            'authorization': `Bearer ${userToken}` /* Token necessaire pour avoir l'autorisation de poster. */
-        },
-        body: formData /* Corps de la requête avec image, title, categorie. */
-    })
-        .then(res => {/* Si la reponse du serveur est ok */
-            if (res.ok) {
-                /* Création de la nouvelle figure page d'accueil*/
-                const workAdded = document.createElement('figure');
-                const imgAdded = document.createElement('img');
-                const figcaption = document.createElement('figcaption');
-                imgAdded.setAttribute('alt', title);
-                imgAdded.setAttribute('src', newImg.src);
-                figcaption.setAttribute('id', category);
-                figcaption.innerHTML = title;
-                workAdded.appendChild(imgAdded)
-                workAdded.appendChild(figcaption)
-                gallerySection.appendChild(workAdded)
-
-                alert('Projet ajouté avec succès !')
-
-                modalContainer.style.display = "none";
-                prevDisplay();
-            }
-                
-        })
-        .catch(error => console.log(error))
-
-})
-
 //// Fonction qui supprime un projet en cliquant sur l'icon poubelle. ////
 const deleteWorks = (id) => {
 
     fetch(`http://localhost:5678/api/works/${id}`, {
         method: 'DELETE', /* Type de requête. */
         headers: {
-            'authorization': `Bearer ${userToken}`, /* Token necessaire pour avoir l'autorisation de poster. */
+            'authorization': `Bearer ${userToken}`, /* Token necessaire pour avoir l'autorisation de delete. */
             'Content-Type': 'application/json'
         }
-    })  
+    })
 
         .then(response => {
             if (response.ok) {
                 console.log(response.status);
             } else {
-                console.log('fetch delete error')
+                console.log('fetch delete error');
             }
         })
         .catch(error => console.log(error))
 }
 
-//// Fonction qui nous permet de se deconnecter. ////
-logoutBtn.addEventListener('click', (event) => {
-    event.preventDefault();
-    window.sessionStorage.removeItem('token');
-    window.location.replace('./index.html');
-})
-
 // AddEventListener :
 
-/* Ajout du nouveau projet. */
-// myForm.addEventListener('submit', function (event) {
-//     event.preventDefault();
-//     addWorks();
-//     // setTimeout(() => {
-//     //     window.location.reload(true);
-//     // }, 2000);
-//     /*window.location.reload()*/
-// })
+/* Permet de mettre un aperçu de l'image que l'on a upoloadé dans une balise img crée plus haut. */
+imgInput.addEventListener('change', function (event) {
+    const image = URL.createObjectURL(event.target.files[0]); /* Création d'un URL pour l'image uploadé. */
+    newImg.src = image; /* La source de l'image devient l'url crée. */
+    displayImg.append(newImg); /* Ajout de la nouvelle image dans le bloc displayImg. */
+    displayImg.style.display = "flex";
+    galleryBloc.style.display = "none";
+})
 
-/* Ouverture du container des modales */
+/* Ouverture du container des modales et suppression de projets */
 openModal.addEventListener('click', async function () {
-    galleryPhoto.innerHTML= '';
+    galleryPhoto.innerHTML = '';
     gallerySection.innerHTML = "";
     modalContainer.style.display = "flex";
     modal1.style.display = "block";
     modal2.style.display = "none";
 
-    /* Création d'une nouvelle gallerie dans la modale & utilisation de la fonction supprimer. */
+    /* Création d'une nouvelle gallerie dans la modale & utilisation de la fonction deleteWorks. */
     const response = await fetch('http://localhost:5678/api/works');
     const projects = await response.json();
 
     try {
         for (let i = 0; i < projects.length; i++) {
-            /* Figures modales */
+            /* Figures modales. */
             const figureElm = document.createElement('figure');
             const imgElm = document.createElement('img');
             const figCaptionElm = document.createElement('figcaption');
@@ -219,8 +191,8 @@ openModal.addEventListener('click', async function () {
             figureElm.appendChild(trashElm);
             figureElm.appendChild(moveElm);
             galleryPhoto.appendChild(figureElm);
-            
-           /* Figures galerie actualisés sans reload */
+
+            /* Figures galerie actualisés sans reload. */
             const figureElm2 = document.createElement('figure');
             const imgElm2 = document.createElement('img');
             const figCaptionElm2 = document.createElement('figcaption');
@@ -231,36 +203,85 @@ openModal.addEventListener('click', async function () {
             figureElm2.appendChild(figCaptionElm2);
             gallerySection.appendChild(figureElm2);
 
+            /* Suppression d'un projet avec récuperation de l'id. */
             trashElm.addEventListener("click", (event) => {
                 event.preventDefault();
                 const workId = event.currentTarget.getAttribute('data-workid');
-                let text = "Êtes vous sur de vouloir supprimer ce projet ?"
-                if (confirm(text) == true){
+                let text = "Êtes vous sur de vouloir supprimer ce projet ?";
+                if (confirm(text) == true) {
                     deleteWorks(workId);
-                    figureElm.remove() ; 
+                    figureElm.remove();
                     figureElm2.remove();
                     alert('Projet supprimé avec succès !');
                 } else {
                     alert('Suppression annulée !');
                 }
-
             })
-            
         }
     }
     catch (error) {
-        console.log(error)
+        console.log(error);
     }
+})
 
-    
+//// Fonction qui permet d'ajouter un nouveau projet. ////
+myForm.addEventListener('submit', async function (event) {
+    event.preventDefault();
+    /* Nous stockons ici les valeurs entrées dans nos input type file et text ainsi que l'option. */
+    const image = document.getElementById("file").files[0];
+    const title = document.getElementById("title").value;
+    const category = document.getElementById("categorie").value;
+
+    /* [Crée un nouvel objet clé + valeur] ; FormData (FormData object) simplifie la requête, nous n'avons pas a spécifié d'headers, encoding, etc. */
+    const formData = new FormData();
+
+    /* Nous stockons ici les valeurs dans ce nouvel objet formData. */
+    formData.append('image', image);
+    formData.append('title', title);
+    formData.append('category', parseInt(category));
+
+    fetch('http://localhost:5678/api/works', {
+        method: 'POST', /* Type de requête. */
+        headers: {
+            'authorization': `Bearer ${userToken}` /* Token necessaire pour avoir l'autorisation de poster. */
+        },
+        body: formData /* Corps de la requête avec image, title, categorie. */
+    })
+        .then(res => {
+            if (res.ok) {
+                /* Si la reponse du serveur est ok. */
+                /* Création de la nouvelle figure page d'accueil avec les valeurs de l'utilisateur.*/
+                const workAdded = document.createElement('figure');
+                const imgAdded = document.createElement('img');
+                const figcaption = document.createElement('figcaption');
+                imgAdded.setAttribute('alt', title);
+                imgAdded.setAttribute('src', newImg.src);
+                figcaption.setAttribute('id', category);
+                figcaption.innerHTML = title;
+                workAdded.appendChild(imgAdded);
+                workAdded.appendChild(figcaption);
+                gallerySection.appendChild(workAdded);
+                alert('Projet ajouté avec succès !');
+            }
+            return res.json();
+        })
+        .then(data => {
+            /* Création de la nouvelle figure modale 1. */
+            createModalFigure(data)
+
+        })
+        .catch(error => console.log(error))
+        /* Retour sur la première modale après envoi du nouveau projet. */
+        modalContainer.style.display = "flex";
+        modal1.style.display = "block";
+        modal2.style.display = "none";
 })
 
 /* Ouverture de la modale pour ajouter un projet. */
 addBtn.addEventListener('click', function () {
-    prevDisplay();
     modal1.style.display = "none";
     modal2.style.display = "block";
-
+    prevDisplay();
 })
 /* Retour à la première modale. */
 lastModal.addEventListener('click', function () {
@@ -285,19 +306,8 @@ window.onclick = function (event) {
     }
 }
 
-/* Permet de mettre un aperçu de l'image que l'on a upoloadé dans une balise img crée plus haut. */
-imgInput.addEventListener('change', function (event) {
-    const image = URL.createObjectURL(event.target.files[0]); /* Création d'un URL pour l'image uploadé */
-    newImg.src = image; /* La source de l'image devient l'url crée */
-    displayImg.append(newImg); /* Ajout de la nouvelle image dans le bloc displayImg */
-    displayImg.style.display = "flex";
-    galleryBloc.style.display = "none";
-    
-})
-
-
-
 // Appel fonctions :
 getAll();
 getCategory();
+
 
