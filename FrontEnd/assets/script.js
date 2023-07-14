@@ -1,14 +1,12 @@
 //// Récupération des élements HTML dans le JS. ////
 
-/* Récupération de la section gallerie ou les images se display.*/
+/* Récupération de la section gallerie où les images se display.*/
 const gallerySection = document.querySelector('.gallery');
 /* Récupération des boutons pour modifier leur backgroundColor via fonction btnFocus. */
 const btnAll = document.querySelector('.btnAll');
 const btnObj = document.querySelector('.btnObj');
 const btnApp = document.querySelector('.btnApp');
 const btnHotels = document.querySelector('.btnHotels');
-/* Stockage du fetch et de sa réponse en objet javascript dans une variable, facilite la réutilisation */
-/*const url = fetch('http://localhost:5678/api/works').then(response => response.json());*/
 
 //// Fonction qui ajoute et supprime la class "activeBtn"  ////
 const btnFocus = (btn) => {
