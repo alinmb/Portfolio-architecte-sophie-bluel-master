@@ -2,7 +2,6 @@
 
 /* Récuperation de la section ou tout les projets s'affichent lors du lancement de la page. */
 const gallerySection = document.querySelector('.gallery');
-
 /* Récuperation de tous les élements pour l'affichage, l'édition ou le retrait des modales. */
 const modalContainer = document.querySelector('.modal-container'); /* Le containeur qui s'ouvre lorsque l'on clique sur "modifier". */
 const openModal = document.querySelector('#openModal');
@@ -24,10 +23,8 @@ const imgInput = document.getElementById("file"); /* Recupère l'input type file
 const newImg = document.createElement('img'); /* Crée l'image qui contiendra l'aperçu image */
 const titleModal = document.getElementById("title");
 const catModal = document.getElementById("categorie");
-
 /* Stockage du token dans une variable pour utilisation simplifiée. */
 let userToken = window.sessionStorage.getItem("token");
-
 /* Stockage de la requête au serveur et de sa reponse en objet javascript dans une variable URL. */
 let url = fetch('http://localhost:5678/api/works').then(response => response.json());
 
@@ -261,7 +258,6 @@ myForm.addEventListener('submit', async function (event) {
                 workAdded.appendChild(imgAdded);
                 workAdded.appendChild(figcaption);
                 gallerySection.appendChild(workAdded);
-                alert('Projet ajouté avec succès !');
             }
             return res.json();
         })
@@ -271,10 +267,14 @@ myForm.addEventListener('submit', async function (event) {
 
         })
         .catch(error => console.log(error))
-        /* Retour sur la première modale après envoi du nouveau projet. */
-        modalContainer.style.display = "flex";
-        modal1.style.display = "block";
-        modal2.style.display = "none";
+    /* Retour sur la première modale après envoi du nouveau projet. */
+    modalContainer.style.display = "flex";
+    modal1.style.display = "block";
+    modal2.style.display = "none";
+
+    setTimeout(() => {
+        alert('Projet ajouté avec succès !');
+    }, "500")
 })
 
 /* Ouverture de la modale pour ajouter un projet. */
@@ -309,5 +309,3 @@ window.onclick = function (event) {
 // Appel fonctions :
 getAll();
 getCategory();
-
-
