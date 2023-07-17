@@ -133,15 +133,67 @@ const deleteWorks = (id) => {
             'Content-Type': 'application/json'
         }
     })
-
         .then(response => {
             if (response.ok) {
                 console.log(response.status);
-            } else {
-                console.log('fetch delete error');
-            }
+            } 
         })
         .catch(error => console.log(error))
+}
+
+//// Fonction qui permet d'ajouter un nouveau projet. ////
+const sendWorks = () => {
+    /* Nous stockons ici les valeurs entrées dans nos input type file et text ainsi que l'option. */
+    const image = document.getElementById("file").files[0];
+    const title = document.getElementById("title").value;
+    const category = document.getElementById("categorie").value;
+
+    /* [Crée un nouvel objet clé + valeur] ; FormData (FormData object) simplifie la requête, nous n'avons pas a spécifié d'headers, encoding, etc. */
+    const formData = new FormData();
+
+    /* Nous stockons ici les valeurs dans ce nouvel objet formData. */
+    formData.append('image', image);
+    formData.append('title', title);
+    formData.append('category', parseInt(category));
+
+    fetch('http://localhost:5678/api/works', {
+        method: 'POST', /* Type de requête. */
+        headers: {
+            'authorization': `Bearer ${userToken}` /* Token necessaire pour avoir l'autorisation de poster. */
+        },
+        body: formData /* Corps de la requête avec image, title, categorie. */
+    })
+        .then(res => {
+            if (res.ok) {
+                /* Si la reponse du serveur est ok. */
+                /* Création de la nouvelle figure page d'accueil avec les valeurs de l'utilisateur.*/
+                const workAdded = document.createElement('figure');
+                const imgAdded = document.createElement('img');
+                const figcaption = document.createElement('figcaption');
+                imgAdded.setAttribute('alt', title);
+                imgAdded.setAttribute('src', newImg.src);
+                figcaption.setAttribute('id', category);
+                figcaption.innerHTML = title;
+                workAdded.appendChild(imgAdded);
+                workAdded.appendChild(figcaption);
+                gallerySection.appendChild(workAdded);
+            }
+            return res.json();
+        })
+        .then(data => {
+            /* Création de la nouvelle figure modale 1. */
+            createModalFigure(data)
+
+        })
+        .catch(error => console.log(error))
+    /* Retour sur la première modale après envoi du nouveau projet. */
+    modalContainer.style.display = "flex";
+    modal1.style.display = "block";
+    modal2.style.display = "none";
+
+    setTimeout(() => {
+        alert('Projet ajouté avec succès !');
+    }, "500")
 }
 
 // AddEventListener :
@@ -153,6 +205,18 @@ imgInput.addEventListener('change', function (event) {
     displayImg.append(newImg); /* Ajout de la nouvelle image dans le bloc displayImg. */
     displayImg.style.display = "flex";
     galleryBloc.style.display = "none";
+})
+
+/* Gestion de l'evenement submit sur form. */
+myForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    if (document.getElementById("file").value !== "" &&
+        document.getElementById("title").value !== "" &&
+        document.getElementById("categorie").value !== "") {
+        sendWorks();
+    } else {
+        alert("Veuillez remplir tous les champs.");
+    }
 })
 
 /* Ouverture du container des modales et suppression de projets */
@@ -219,62 +283,6 @@ openModal.addEventListener('click', async function () {
     catch (error) {
         console.log(error);
     }
-})
-
-//// Fonction qui permet d'ajouter un nouveau projet. ////
-myForm.addEventListener('submit', async function (event) {
-    event.preventDefault();
-    /* Nous stockons ici les valeurs entrées dans nos input type file et text ainsi que l'option. */
-    const image = document.getElementById("file").files[0];
-    const title = document.getElementById("title").value;
-    const category = document.getElementById("categorie").value;
-
-    /* [Crée un nouvel objet clé + valeur] ; FormData (FormData object) simplifie la requête, nous n'avons pas a spécifié d'headers, encoding, etc. */
-    const formData = new FormData();
-
-    /* Nous stockons ici les valeurs dans ce nouvel objet formData. */
-    formData.append('image', image);
-    formData.append('title', title);
-    formData.append('category', parseInt(category));
-
-    fetch('http://localhost:5678/api/works', {
-        method: 'POST', /* Type de requête. */
-        headers: {
-            'authorization': `Bearer ${userToken}` /* Token necessaire pour avoir l'autorisation de poster. */
-        },
-        body: formData /* Corps de la requête avec image, title, categorie. */
-    })
-        .then(res => {
-            if (res.ok) {
-                /* Si la reponse du serveur est ok. */
-                /* Création de la nouvelle figure page d'accueil avec les valeurs de l'utilisateur.*/
-                const workAdded = document.createElement('figure');
-                const imgAdded = document.createElement('img');
-                const figcaption = document.createElement('figcaption');
-                imgAdded.setAttribute('alt', title);
-                imgAdded.setAttribute('src', newImg.src);
-                figcaption.setAttribute('id', category);
-                figcaption.innerHTML = title;
-                workAdded.appendChild(imgAdded);
-                workAdded.appendChild(figcaption);
-                gallerySection.appendChild(workAdded);
-            }
-            return res.json();
-        })
-        .then(data => {
-            /* Création de la nouvelle figure modale 1. */
-            createModalFigure(data)
-
-        })
-        .catch(error => console.log(error))
-    /* Retour sur la première modale après envoi du nouveau projet. */
-    modalContainer.style.display = "flex";
-    modal1.style.display = "block";
-    modal2.style.display = "none";
-
-    setTimeout(() => {
-        alert('Projet ajouté avec succès !');
-    }, "500")
 })
 
 /* Ouverture de la modale pour ajouter un projet. */
