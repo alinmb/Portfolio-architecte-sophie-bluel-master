@@ -20,21 +20,15 @@
 		<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
 		<nav>
 			<ul>
-				<a href="index.html">
-					<li>projets</li>
-				</a>
-				<a href="mailto: sophie.bluel@openclass.fr">
-					<li>contact</li>
-				</a>
-				<a href="#" class="logout-btn">
-					<li>logout</li>
-				</a>
+				<li><a href="index.html">projets</a></li>
+				<li><a href="mailto:sophie.bluel@openclass.fr">contact</a></li>
+				<li><a href="#" class="logout-btn">logout</a></li>
 				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 			</ul>
 		</nav>
 	</header>
 	<main>
-		<section id="introduction">
+		<div id="introduction">
 			<figure>
 				<img src="./assets/images/sophie-bluel.png" alt="">
 				<div class="edit-bloc">
@@ -51,7 +45,7 @@
 				<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG,
 					décorateur(trice)</p>
 			</article>
-		</section>
+		</div>
 
 		<!--MODALES-->
 
@@ -81,11 +75,11 @@
 				</div>
 
 				<form id="form">
-					<p for="title">Titre</p>
+					<p>Titre</p>
 					<input type="text" name="title" id="title" onkeyup="filledInput()" required>
-					<p for="cat-selected">Catégorie</p>
+					<p>Catégorie</p>
 					<select name="categorie" id="categorie" required class="cat-selected" onchange="filledInput()">
-						<option id="value"></option>
+						<option id="value" disabled="disabled" label=" "></option>
 					</select>
 					<div class="valid-bloc">
 						<button class="btn-valid" type="submit">Valider</button>
