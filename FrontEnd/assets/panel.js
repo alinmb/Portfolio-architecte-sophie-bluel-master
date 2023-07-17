@@ -166,24 +166,25 @@ const sendWorks = () => {
         .then(res => {
             if (res.ok) {
                 /* Si la reponse du serveur est ok. */
-                /* Création de la nouvelle figure page d'accueil avec les valeurs de l'utilisateur.*/
-                const workAdded = document.createElement('figure');
-                const imgAdded = document.createElement('img');
-                const figcaption = document.createElement('figcaption');
-                imgAdded.setAttribute('alt', title);
-                imgAdded.setAttribute('src', newImg.src);
-                figcaption.setAttribute('id', category);
-                figcaption.innerHTML = title;
-                workAdded.appendChild(imgAdded);
-                workAdded.appendChild(figcaption);
-                gallerySection.appendChild(workAdded);
+                return res.json();
+            } else {
+                console.log("FETCH POST ERROR")
             }
-            return res.json();
         })
         .then(data => {
+            /* Création de la nouvelle figure page d'accueil avec les valeurs de l'utilisateur.*/
+            const workAdded = document.createElement('figure');
+            const imgAdded = document.createElement('img');
+            const figcaption = document.createElement('figcaption');
+            imgAdded.setAttribute('alt', title);
+            imgAdded.setAttribute('src', newImg.src);
+            figcaption.setAttribute('id', category);
+            figcaption.innerHTML = title;
+            workAdded.appendChild(imgAdded);
+            workAdded.appendChild(figcaption);
+            gallerySection.appendChild(workAdded);
             /* Création de la nouvelle figure modale 1. */
             createModalFigure(data)
-
         })
         .catch(error => console.log(error))
     /* Retour sur la première modale après envoi du nouveau projet. */
