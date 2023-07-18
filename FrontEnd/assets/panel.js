@@ -123,7 +123,7 @@ const filledInput = () => {
     }
 }
 
-//// Fonction qui supprime un projet en cliquant sur l'icon poubelle. ////
+//// Requête DELETE pour supprimer un projet en utilisant son ID et son Token pour autorisation. ////
 const deleteWorks = (id) => {
 
     fetch(`http://localhost:5678/api/works/${id}`, {
