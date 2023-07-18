@@ -17,7 +17,7 @@ const categorie = document.querySelector('#categorie'); /* SELECT élement. */
 const btnValid = document.querySelector('.btn-valid'); /* Envoi POST. */
 const myForm = document.querySelector('#form');
 /* Aperçu image uploadé. */
-const galleryBloc = document.querySelector(".gallery-ajouter") /* Bloc contenant input type file + btn upload. */
+const galleryBloc = document.querySelector(".gallery-ajouter"); /* Bloc contenant input type file + btn upload. */
 const displayImg = document.querySelector('.display-img'); /* Display image upload. */
 const imgInput = document.getElementById("file"); /* Recupère l'input type file pour utiliser sa valeur. */
 const newImg = document.createElement('img'); /* Crée l'image qui contiendra l'aperçu image */
@@ -88,7 +88,7 @@ const getAll = () => {
             createFigure(project); /* Création des figures, img, figcaption grâce à la fonction. */
         }
     })
-        .catch(error => console.log(error))
+        .catch(error => console.log(error));
 }
 
 //// Fonction qui crée des balises <option> dans le <select> déjà présent dans le HTML. ////
@@ -138,7 +138,7 @@ const deleteWorks = (id) => {
                 console.log(response.status);
             } 
         })
-        .catch(error => console.log(error))
+        .catch(error => console.log(error));
 }
 
 //// Fonction qui permet d'ajouter un nouveau projet. ////
@@ -168,7 +168,7 @@ const sendWorks = () => {
                 /* Si la reponse du serveur est ok. */
                 return res.json();
             } else {
-                console.log("FETCH POST ERROR")
+                console.log("FETCH POST ERROR");
             }
         })
         .then(data => {
@@ -184,7 +184,7 @@ const sendWorks = () => {
             workAdded.appendChild(figcaption);
             gallerySection.appendChild(workAdded);
             /* Création de la nouvelle figure modale 1. */
-            createModalFigure(data)
+            createModalFigure(data);
         })
         .catch(error => console.log(error))
     /* Retour sur la première modale après envoi du nouveau projet. */
@@ -269,7 +269,7 @@ openModal.addEventListener('click', async function () {
             trashElm.addEventListener("click", (event) => {
                 event.preventDefault();
                 const workId = event.currentTarget.getAttribute('data-workid');
-                let text = "Êtes vous sur de vouloir supprimer ce projet ?";
+                const text = "Êtes-vous sur de vouloir supprimer ce projet ?";
                 if (confirm(text) == true) {
                     deleteWorks(workId);
                     figureElm.remove();

@@ -30,27 +30,19 @@ const createFigure = (link) => {
 //// Fonction qui récupère tous les projets présent dans l'API + appel à la fonction createFigure. ////
 async function getAll () {
     gallerySection.innerHTML = ""; /* On supprime tout les élements présent dans la gallerie. */
-    btnFocus(btnAll) /* On focus le bouton de la section ou nous nous trouvons. */
+    btnFocus(btnAll); /* On focus le bouton de la section ou nous nous trouvons. */
     /* Récuperation des données depuis l'API, nous bouclons dans les données et récuperons chaque projets présent 1 à 1. */
     const response = await fetch('http://localhost:5678/api/works');
     const projects = await response.json();
     
     try {
         for (i = 0; i < projects.length; i++) {
-            let eachProject = `
-                <figure>
-                    <img src="${projects[i].imageUrl}" alt="${projects[i].title}" class="gallery-img">
-                    <figcaption>${projects[i].title}</figcaption>
-                </figure>
-            `;
-            gallerySection.insertAdjacentHTML('beforeend', eachProject);
+            createFigure(projects[i]);
         }
     }
     catch (error) {
-        console.log(error)
-    }
-    
-        
+        console.log(error);
+    }    
 }
 
 //// FILTRES : Récupération des Objets (id:1), des Appartements (id:2), des Hôtels & restaurants (id:3) ////
@@ -58,14 +50,14 @@ async function getAll () {
 // Objets :
 async function getObjects () {
     gallerySection.innerHTML = "";
-    btnFocus(btnObj)
+    btnFocus(btnObj);
     const response = await fetch('http://localhost:5678/api/works');
     const projectsObjects = await response.json();
 
     try {
         for (i = 0; i < projectsObjects.length; i++) {
             if (projectsObjects[i].categoryId === 1) {
-                createFigure(projectsObjects[i])
+                createFigure(projectsObjects[i]);
             }
         }
     }
@@ -77,14 +69,14 @@ async function getObjects () {
 // Appartements :
 async function getApp () {
     gallerySection.innerHTML = "";
-    btnFocus(btnApp)
+    btnFocus(btnApp);
     const response = await fetch('http://localhost:5678/api/works');
     const projectsAppart = await response.json();
 
     try {
         for (i = 0; i < projectsAppart.length; i++) {
             if (projectsAppart[i].categoryId === 2) {
-                createFigure(projectsAppart[i])
+                createFigure(projectsAppart[i]);
             } 
         }
     }
@@ -96,21 +88,21 @@ async function getApp () {
 // Hôtels & restaurants :
 async function getHotels () {
     gallerySection.innerHTML = "";
-    btnFocus(btnHotels)
+    btnFocus(btnHotels);
     const response = await fetch('http://localhost:5678/api/works');
     const projectsHotelsRest = await response.json();
 
     try {
         for (i = 0; i < projectsHotelsRest.length; i++) {
             if (projectsHotelsRest[i].categoryId === 3) {
-                createFigure(projectsHotelsRest[i])
+                createFigure(projectsHotelsRest[i]);
             } 
         }
     }
     catch (error) {
-        console.log(error)
+        console.log(error);
     }
 }
 
-// Appel fonctions :
-getAll()
+// Appel fonction :
+getAll();

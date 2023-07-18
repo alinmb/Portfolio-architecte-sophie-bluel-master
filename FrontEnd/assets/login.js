@@ -12,7 +12,7 @@ const login = () => {
 
   let emailRegExp = new RegExp("[a-z0-9._-]+@[a-z0-9._-]+\\.[a-z0-9._-]+")
      if (!emailRegExp.test(account.email)) {
-        throw new Error(invalide.innerHTML ="Format e-mail invalide. (exemple@exemple.com)")
+        throw new Error(invalide.innerHTML ="Format e-mail invalide. (exemple@exemple.com)");
      } 
   /* Credentials = les données que le serveur utilisera pour réalisé l'opération demandée par la requête. */
   /* Nous convertissons account en chaine JSON */
@@ -33,7 +33,7 @@ const login = () => {
         return response.json(); /* On return la promesse si la reponse === status 200. */
 
       } else {
-        invalide.innerText = "Erreur dans l’identifiant ou le mot de passe." /* status 401 unauthorized / 404 user not found. */
+        invalide.innerText = "Erreur dans l’identifiant ou le mot de passe."; /* status 401 unauthorized / 404 user not found. */
       }
 
     })
