@@ -48,7 +48,7 @@ async function getAll () {
 //// FILTRES : Récupération des Objets (id:1), des Appartements (id:2), des Hôtels & restaurants (id:3) ////
 
 // Objets :
-async function getObjects () {
+btnObj.addEventListener('click', async function () {
     gallerySection.innerHTML = "";
     btnFocus(btnObj);
     const response = await fetch('http://localhost:5678/api/works');
@@ -64,10 +64,10 @@ async function getObjects () {
     catch (error) {
         console.log(error)
     }
-}
+})
 
 // Appartements :
-async function getApp () {
+btnApp.addEventListener('click', async function () {
     gallerySection.innerHTML = "";
     btnFocus(btnApp);
     const response = await fetch('http://localhost:5678/api/works');
@@ -83,10 +83,10 @@ async function getApp () {
     catch (error) {
         console.log(error)
     }
-}
+})
 
 // Hôtels & restaurants :
-async function getHotels () {
+btnHotels.addEventListener('click', async function () {
     gallerySection.innerHTML = "";
     btnFocus(btnHotels);
     const response = await fetch('http://localhost:5678/api/works');
@@ -102,7 +102,11 @@ async function getHotels () {
     catch (error) {
         console.log(error);
     }
-}
+})
+
+btnAll.addEventListener('click', async function () {
+    getAll();
+})
 
 // Appel fonction :
 getAll();

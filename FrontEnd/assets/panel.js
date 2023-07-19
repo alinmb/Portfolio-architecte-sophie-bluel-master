@@ -123,6 +123,14 @@ const filledInput = () => {
     }
 }
 
+categorie.addEventListener('change', function () {
+    filledInput();
+})
+titleModal.addEventListener('keyup', function () {
+    filledInput();
+})
+
+
 //// Requête DELETE pour supprimer un projet en utilisant son ID et son Token pour autorisation. ////
 const deleteWorks = (id) => {
 
@@ -270,13 +278,11 @@ openModal.addEventListener('click', async function () {
                 event.preventDefault();
                 const workId = event.currentTarget.getAttribute('data-workid');
                 const text = "Êtes-vous sur de vouloir supprimer ce projet ?";
-                if (confirm(text) == true) {
+                if (confirm(text)) {
                     deleteWorks(workId);
                     figureElm.remove();
                     figureElm2.remove();
                     alert('Projet supprimé avec succès !');
-                } else {
-                    alert('Suppression annulée !');
                 }
             })
         }
