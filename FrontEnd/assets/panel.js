@@ -186,7 +186,7 @@ const sendWorks = () => {
             const figcaption = document.createElement('figcaption');
             imgAdded.setAttribute('alt', title);
             imgAdded.setAttribute('src', newImg.src);
-            figcaption.setAttribute('id', category);
+            workAdded.setAttribute('id', category);
             figcaption.innerHTML = title;
             workAdded.appendChild(imgAdded);
             workAdded.appendChild(figcaption);
@@ -202,6 +202,7 @@ const sendWorks = () => {
 
     setTimeout(() => {
         alert('Projet ajouté avec succès !');
+        modalContainer.style.display = "none";
     }, "500")
 }
 
