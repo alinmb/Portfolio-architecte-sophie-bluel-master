@@ -16,6 +16,8 @@ const logoutBtn = document.querySelector('.logout-btn');
 const categorie = document.querySelector('#categorie'); /* SELECT élement. */
 const btnValid = document.querySelector('.btn-valid'); /* Envoi POST. */
 const myForm = document.querySelector('#form');
+const eventMsg = document.querySelector('.eventMsg')
+const eventMsg2 = document.querySelector('.eventMsg2')
 /* Aperçu image uploadé. */
 const galleryBloc = document.querySelector(".gallery-ajouter"); /* Bloc contenant input type file + btn upload. */
 const displayImg = document.querySelector('.display-img'); /* Display image upload. */
@@ -132,21 +134,25 @@ titleModal.addEventListener('keyup', function () {
 
 
 //// Requête DELETE pour supprimer un projet en utilisant son ID et son Token pour autorisation. ////
-const deleteWorks = (id) => {
+/*let isTrue;*/
+const deleteWorks = async (id) => {
 
-    fetch(`http://localhost:5678/api/works/${id}`, {
-        method: 'DELETE', /* Type de requête. */
-        headers: {
-            'authorization': `Bearer ${userToken}`, /* Token necessaire pour avoir l'autorisation de delete. */
-            'Content-Type': 'application/json'
+    try {
+        const response = await fetch(`http://localhost:5678/api/works/${id}`,{
+            method: 'DELETE',
+            headers: {
+                'authorization': `Bearer ${userToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            return true;
         }
-    })
-        .then(response => {
-            if (response.ok) {
-                console.log(response.status);
-            } 
-        })
-        .catch(error => console.log(error));
+    }
+    catch (error) {
+        console.log(error)
+    }
 }
 
 //// Fonction qui permet d'ajouter un nouveau projet. ////
@@ -195,15 +201,15 @@ const sendWorks = () => {
             createModalFigure(data);
         })
         .catch(error => console.log(error))
-    /* Retour sur la première modale après envoi du nouveau projet. */
-    modalContainer.style.display = "flex";
-    modal1.style.display = "block";
-    modal2.style.display = "none";
-
-    setTimeout(() => {
-        alert('Projet ajouté avec succès !');
-        modalContainer.style.display = "none";
-    }, "500")
+            /* Retour sur la première modale après envoi du nouveau projet. */
+            modalContainer.style.display = "flex";
+            modal1.style.display = "block";
+            modal2.style.display = "none";
+            eventMsg.innerHTML = "Projet ajouté avec succès ✔";
+            setTimeout(() => {
+                eventMsg.innerHTML= "";
+                modalContainer.style.display = "none";
+            }, "1000")
 }
 
 // AddEventListener :
@@ -225,7 +231,7 @@ myForm.addEventListener('submit', function (event) {
         document.getElementById("categorie").value !== "") {
         sendWorks();
     } else {
-        alert("Veuillez remplir tous les champs.");
+        eventMsg2.innerHTML = "Veuillez remplir tous les champs.";
     }
 })
 
@@ -278,12 +284,16 @@ openModal.addEventListener('click', async function () {
             trashElm.addEventListener("click", (event) => {
                 event.preventDefault();
                 const workId = event.currentTarget.getAttribute('data-workid');
-                const text = "Êtes-vous sur de vouloir supprimer ce projet ?";
-                if (confirm(text)) {
+                if (deleteWorks()) {
                     deleteWorks(workId);
                     figureElm.remove();
                     figureElm2.remove();
-                    alert('Projet supprimé avec succès !');
+                    eventMsg.innerHTML = "Projet supprimé avec succès ✔";
+                    setTimeout(() => {
+                        eventMsg.innerHTML= "";
+                    }, "1200")
+                } else {
+                    console.log("erreur")
                 }
             })
         }
@@ -292,6 +302,8 @@ openModal.addEventListener('click', async function () {
         console.log(error);
     }
 })
+
+console.log(deleteWorks())
 
 /* Ouverture de la modale pour ajouter un projet. */
 addBtn.addEventListener('click', function () {

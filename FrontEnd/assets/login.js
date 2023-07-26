@@ -1,5 +1,5 @@
 //// Récupération des élements HTML dans le JS. ////
-const submitBtn = document.getElementById('submitBtn');
+const myForm = document.getElementById('form');
 const invalide = document.querySelector('.invalide');
 
 //// Fonction qui permet de se connecter à son espace administrateur (panel admin). ////
@@ -44,7 +44,7 @@ const login = () => {
     }).catch(error => console.log(error));
 }
 
-submitBtn.addEventListener('click', (event) => {
+myForm.addEventListener('submit', (event) => {
   event.preventDefault();
   login();
 })

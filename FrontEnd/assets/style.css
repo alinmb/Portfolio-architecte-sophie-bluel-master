@@ -167,7 +167,7 @@ a:hover {
 	cursor: pointer;
 }
 
-.buttonBloc .activeBtn {
+.buttonBloc .special {
 	background-color: #1D6154;
 	color: white;
 }
@@ -425,6 +425,12 @@ footer nav ul {
 	color: darkred;
 }
 
+.eventMsg {
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	color: #B1663C;
+}
 /***** DEUXIEME MODAL *****/
 
 .modal2 {
